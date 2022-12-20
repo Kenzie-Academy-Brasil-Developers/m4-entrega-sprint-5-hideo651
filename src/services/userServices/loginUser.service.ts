@@ -23,6 +23,10 @@ const loginService = async ({
     throw new AppError("Senha ou email errada", 403);
   }
 
+  if (!user.isActive) {
+    throw new AppError("Usuário inativo", 400);
+  }
+
   const token = Jwt.sign(
     {
       isAdm: user.isAdm,
