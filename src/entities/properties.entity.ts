@@ -4,12 +4,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Adress } from "./adress.entity";
 import { Categories } from "./categories.entity";
+import { Schedules } from "./schedules.entity";
 
 @Entity("properties")
 class Properties {
@@ -31,12 +33,15 @@ class Properties {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @OneToOne(() => Adress)
+  @OneToOne(() => Adress, { eager: true })
   @JoinColumn()
-  adress: Adress;
+  address: Adress;
 
-  @ManyToOne(() => Categories, (categories) => categories.properties)
-  category: Categories;
+  @ManyToOne(() => Categories)
+  category: Categories["id"];
+
+  @OneToMany(() => Schedules, (property) => property.property)
+  schedules: Schedules[];
 }
 
 export { Properties };
