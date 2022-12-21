@@ -12,6 +12,3 @@ const validateAdm = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default validateAdm;
-
-// throw new AppError("Miss authorization", 403);
-// return res.status(403).json({ message: "Miss authorization" });

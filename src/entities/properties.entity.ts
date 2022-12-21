@@ -35,7 +35,7 @@ class Properties {
   @JoinColumn()
   adress: Adress;
 
-  @ManyToOne(() => Categories)
+  @ManyToOne(() => Categories, (categories) => categories.properties)
   category: Categories;
 }
 
