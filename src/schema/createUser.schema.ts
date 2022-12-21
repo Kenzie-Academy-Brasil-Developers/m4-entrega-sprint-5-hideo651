@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import { SchemaOf } from "yup";
+import { IPropertyRequest } from "../interfaces/properties";
 import { IUser, IUserUpdate } from "../interfaces/users";
 
 const userSchema: SchemaOf<IUserUpdate> = yup.object().shape({
@@ -17,4 +18,11 @@ const userNoPassword: SchemaOf<IUser> = yup.object().shape({
   updatedAt: yup.date().notRequired(),
 });
 
-export { userSchema, userNoPassword };
+const propertySchema: SchemaOf<IPropertyRequest> = yup.object().shape({
+  value: yup.number().required(),
+  size: yup.number().required(),
+  address: new yup.ObjectSchema().required(),
+  categoryId: yup.string().required(),
+});
+
+export { userSchema, userNoPassword, propertySchema };

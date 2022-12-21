@@ -1,5 +1,6 @@
 import AppDataSource from "../../data-source";
 import { Adress } from "../../entities/adress.entity";
+import { Categories } from "../../entities/categories.entity";
 import { Properties } from "../../entities/properties.entity";
 import { AppError } from "../../error";
 import { IPropertyRequest } from "../../interfaces/properties";
@@ -7,7 +8,7 @@ import { IPropertyRequest } from "../../interfaces/properties";
 const createPropertyService = async (
   data: IPropertyRequest
 ): Promise<Properties> => {
-  const { address, categoryId, size, value } = data;
+  const { address } = data;
 
   const propertyRepo = AppDataSource.getRepository(Properties);
   const adressRepo = AppDataSource.getRepository(Adress);
@@ -15,6 +16,14 @@ const createPropertyService = async (
   const verifyAddress = await adressRepo.findOneBy({
     zipCode: address.zipCode,
   });
+
+  if (address.zipCode.length > 8) {
+    throw new AppError("zipCode inválido", 400);
+  }
+
+  if (address.state.length > 2) {
+    throw new AppError("Estado inválido", 400);
+  }
 
   if (verifyAddress) {
     throw new AppError("Propriedade já cadastrada", 409);
