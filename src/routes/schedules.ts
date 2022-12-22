@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { createScheduleController } from "../controller/schedules.controller";
+import {
+  createScheduleController,
+  listtSchedulePropertiesController,
+} from "../controller/schedules.controller";
 import validateDateUpdate from "../middlewares/validateData";
 import validateDate from "../middlewares/validateDate";
 import validateProperty from "../middlewares/validateProperty";
@@ -16,5 +19,6 @@ scheduleRoutes.post(
   validateProperty,
   createScheduleController
 );
+scheduleRoutes.get("/properties/:id", listtSchedulePropertiesController);
 
 export default scheduleRoutes;
