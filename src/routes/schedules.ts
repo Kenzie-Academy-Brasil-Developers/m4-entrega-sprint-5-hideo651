@@ -3,6 +3,7 @@ import {
   createScheduleController,
   listtSchedulePropertiesController,
 } from "../controller/schedules.controller";
+import validateAdm from "../middlewares/validateAdm";
 import validateDateUpdate from "../middlewares/validateData";
 import validateDate from "../middlewares/validateDate";
 import validateProperty from "../middlewares/validateProperty";
@@ -19,6 +20,11 @@ scheduleRoutes.post(
   validateProperty,
   createScheduleController
 );
-scheduleRoutes.get("/properties/:id", listtSchedulePropertiesController);
+scheduleRoutes.get(
+  "/properties/:id",
+  validateToken,
+  validateAdm,
+  listtSchedulePropertiesController
+);
 
 export default scheduleRoutes;
