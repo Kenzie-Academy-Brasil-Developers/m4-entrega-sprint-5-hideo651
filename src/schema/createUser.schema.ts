@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import { SchemaOf } from "yup";
 import { IPropertyRequest } from "../interfaces/properties";
+import { IScheduleRequest } from "../interfaces/schedules";
 import { IUser, IUserUpdate } from "../interfaces/users";
 
 const userSchema: SchemaOf<IUserUpdate> = yup.object().shape({
@@ -25,4 +26,11 @@ const propertySchema: SchemaOf<IPropertyRequest> = yup.object().shape({
   categoryId: yup.string().required(),
 });
 
-export { userSchema, userNoPassword, propertySchema };
+const schedulesSchema: SchemaOf<IScheduleRequest> = yup.object().shape({
+  userId: yup.string().notRequired(),
+  propertyId: yup.string().required(),
+  date: yup.string().required(),
+  hour: yup.string().required(),
+});
+
+export { userSchema, userNoPassword, propertySchema, schedulesSchema };
