@@ -16,6 +16,18 @@ const createScheduleService = async (
 
   const schedulesRepo = AppDataSource.getRepository(Schedules);
 
+  const user = await userRepo
+    .createQueryBuilder()
+    .select("users")
+    .from(User, "users")
+    .where("users.id = :id", { id: tokenId })
+    .getOne();
+
+  const property = await propertyRepo
+    .createQueryBuilder("properties")
+    .where("properties.id = :id", { id: propertyId })
+    .getOne();
+
   const verifySchedules = await schedulesRepo
     .createQueryBuilder()
     .select("schedules_users_properties")
@@ -32,21 +44,23 @@ const createScheduleService = async (
     );
   }
 
-  const user = await userRepo
+  const verifySchedulesDateAndHour = await schedulesRepo
     .createQueryBuilder()
-    .select("users")
-    .from(User, "users")
-    .where("users.id = :id", { id: tokenId })
+    .select("schedules_users_properties")
+    .from(Schedules, "schedules_users_properties")
+    .where("schedules_users_properties.date = :date", { date })
+    .andWhere("schedules_users_properties.hour = :hour", { hour })
     .getOne();
 
-  const property = await propertyRepo
-    .createQueryBuilder("properties")
-    .where("properties.id = :id", { id: propertyId })
-    .getOne();
-
-  if (!property) {
-    throw new AppError("erro", 404);
+  if (verifySchedulesDateAndHour) {
+    throw new AppError("Já possui compromisso nessa data e horário", 409);
   }
+
+  // const validateProperty = await propertyRepo.findOneBy({ id: propertyId });
+
+  // if (!validateProperty) {
+  //   throw new AppError("Propriedade inválida", 404);
+  // }
 
   const newSchedule = await schedulesRepo
     .createQueryBuilder("schedules_users_properties")
